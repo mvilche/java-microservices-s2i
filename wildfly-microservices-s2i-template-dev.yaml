@@ -301,7 +301,7 @@
         type: Git
       strategy:
         dockerStrategy:
-          dockerfilePath: Dockerfile.jdk
+          dockerfilePath: Dockerfile.jdk.${IMAGE_VERSION}
         type: Docker
       successfulBuildsHistoryLimit: 5
       triggers:
@@ -340,7 +340,7 @@
         type: Git
       strategy:
         dockerStrategy:
-          dockerfilePath: Dockerfile.jre
+          dockerfilePath: Dockerfile.jre.${IMAGE_VERSION}
         type: Docker
       successfulBuildsHistoryLimit: 5
       triggers:
@@ -367,6 +367,10 @@
     - name: VERSION_JDK
       displayName: Openjdk version
       value: '11'
+      required: true
+    - name: IMAGE_VERSION
+      displayName: Image SO version. Values centos,alpine
+      value: 'alpine'
       required: true
     - name: REPO_GIT
       displayName: Git repository
