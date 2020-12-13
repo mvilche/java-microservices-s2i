@@ -17,7 +17,7 @@ RUN mkdir -p /opt/app-root /opt/maven && rm -rf /etc/localtime && \
 wget -q http://www-eu.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 tar xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt/maven && rm apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 ln -s /opt/maven/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn && \
-dnf autoremove -y && dnf clean all && /var/cache/dnf/
+dnf autoremove -y && dnf clean all && rm -rf /var/cache/dnf
 
 COPY s2i/bin/ /usr/libexec/s2i
 
