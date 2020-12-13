@@ -1,0 +1,49 @@
+#!/bin/bash -e
+#
+# S2I run script for the 'springboot-sti' image.
+# The run script executes the server that runs your application.
+#
+# For more information see the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+export APP_DIR=/opt/app-root
+export OPENJDK=11
+
+
+if [ -z "$TIMEZONE" ]; then
+	echo "···································································································"
+	echo "---> TIMEZONE ENV NOT FOUND - START WITH DEFAULT VALUES"
+	echo "---> VALUES: America/Montevideo | America/El_Salvador"
+	echo "···································································································"
+else
+	echo "···································································································"
+	echo "---> TIMEZONE ENV FOUND!: " $TIMEZONE
+	echo "···································································································"
+	cat /usr/share/zoneinfo/$TIMEZONE > /etc/localtime && \
+	echo $TIMEZONE > /etc/timezone
+fi
+
+if [ ! -z "$WAITFOR_HOST" ] && [ ! -z "$WAITFOR_PORT" ] ; then
+	echo "···································································································"
+	echo "---->  WAITFOR  ENABLE.."
+    until nc -z -v -w5 $WAITFOR_HOST $WAITFOR_PORT &> /dev/null; do echo waiting for $WAITFOR_HOST; sleep 10; done;	
+	echo "···································································································"
+fi
+
+
+if [ ! -f $APP_DIR/jolokia.jks ]; then
+	echo "···································································································"
+	echo "GENERATE JOLOKIA KEYSTORE"
+	keytool -genkey -keyalg RSA -alias selfsigned -keystore $APP_DIR/jolokia.jks -storepass password -validity 360 -keysize 2048 -dname "cn=jolokia, ou=jolokia, o=jolokia, c=jolokia" &>/dev/null
+	echo "···································································································"
+fi
+
+
+
+	echo "···································································································"
+	echo "STARTING MICROSERVICE..."
+	echo "···································································································"
+
+
+exec java -javaagent:/usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar=host=0.0.0.0,protocol=https,keystore=$APP_DIR/jolokia.jks,keystorePassword=password  $JAVA_OPTS -jar /opt/app-root/app.jar $APP_OPTIONS
