@@ -15,7 +15,7 @@ RUN dnf update -y && dnf install $JDK_VERSION wget bash which curl nc rsync -y &
 dnf autoremove -y && dnf clean all && rm -rf /var/cache/dnf
 
 
-COPY s2i/bin/run /usr/libexec/s2i/run
+COPY s2i/bin /usr/libexec/s2i
 
 COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
 
