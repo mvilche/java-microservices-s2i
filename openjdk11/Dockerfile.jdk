@@ -27,7 +27,7 @@ RUN mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && 
 chown -R 1001 /opt /home/s2i /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chgrp -R 0 /opt /home/s2i /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chmod -R g=u /opt /usr/libexec/s2i /etc/localtime /etc/timezone && \
-chmod +x/usr/libexec/s2i/*
+chmod +x /usr/libexec/s2i/*
 
 WORKDIR /opt/app-root
 
