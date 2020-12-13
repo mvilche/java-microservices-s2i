@@ -296,7 +296,7 @@
       source:
         contextDir: openjdk${VERSION_JDK}
         git:
-          ref: master
+          ref: main
           uri: 'https://github.com/mvilche/wildfly-microservices-s2i.git'
         type: Git
       strategy:
@@ -335,7 +335,7 @@
       source:
         contextDir: openjdk${VERSION_JDK}
         git:
-          ref: master
+          ref: main
           uri: 'https://github.com/mvilche/wildfly-microservices-s2i.git'
         type: Git
       strategy:
