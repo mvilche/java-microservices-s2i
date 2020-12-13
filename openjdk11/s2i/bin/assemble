@@ -68,7 +68,7 @@ fi
 
 echo "---> COPY GENERATE APP TO DEPLOY DIR..."
 find . -name '*-microservices.jar' | xargs cp -t . &> /dev/null || find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null && mv *.jar /opt/app-root/app.jar && \
-echo "---> APP INSTALL OK!"
+ls -lh /opt/app-root && echo "---> APP INSTALL OK!"
 echo "---> FIX PERMISSIONS DIR"
 /usr/libexec/s2i/fix /opt
 /usr/libexec/s2i/fix /home/s2i
