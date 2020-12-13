@@ -9,7 +9,6 @@
 
 export APP_DIR=/opt/app-root
 
-
 if [ -z "$TIMEZONE" ]; then
 	echo "···································································································"
 	echo "---> TIMEZONE ENV NOT FOUND - START WITH DEFAULT VALUES"

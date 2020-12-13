@@ -1,4 +1,4 @@
-FROM centos:8
+FROM fedora:34
 
 ENV MAVEN_VERSION=3.6.3 \
 JDK_VERSION=java-11-openjdk-devel

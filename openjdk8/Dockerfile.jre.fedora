@@ -1,6 +1,6 @@
-FROM centos:8
+FROM fedora:34
 
-ENV JDK_VERSION=java-11-openjdk \
+ENV JDK_VERSION=java-1.8.0-openjdk \
 JAVA_HOME=/usr/lib/jvm/java-openjdk
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \

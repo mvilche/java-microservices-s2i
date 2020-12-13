@@ -369,7 +369,7 @@
       value: '11'
       required: true
     - name: IMAGE_VERSION
-      displayName: Image SO version. Values centos,alpine
+      displayName: Image SO version. Values centos,alpine,fedora
       value: 'alpine'
       required: true
     - name: REPO_GIT

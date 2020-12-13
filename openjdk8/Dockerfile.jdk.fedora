@@ -1,7 +1,7 @@
-FROM centos:8
+FROM fedora:34
 
 ENV MAVEN_VERSION=3.6.3 \
-JDK_VERSION=java-11-openjdk-devel
+JDK_VERSION=java-1.8.0-openjdk-devel
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
       io.k8s.description="Compilador de aplicaciones java con maven s2i" \
