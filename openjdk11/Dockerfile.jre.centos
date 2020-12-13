@@ -19,7 +19,7 @@ COPY s2i/bin/run /usr/libexec/s2i/run
 
 COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
 
-RUN adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
+RUN adduser -m -u 1001 s2i && usermod -aG 0 s2i && \
 mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && \
 chown -R 1001 /opt /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chgrp -R 0 /opt /usr/libexec/s2i /etc/localtime /etc/timezone  && \
