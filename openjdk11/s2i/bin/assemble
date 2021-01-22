@@ -67,7 +67,9 @@ exit $ERR
 fi
 
 echo "---> COPY GENERATE APP TO DEPLOY DIR..."
-find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || find . -name '*-runner.jar' | xargs cp -t . &> /dev/null && mv *.jar /opt/app-root/app.jar
+find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || find . -name '*-runner.jar' | xargs cp -t . &> /dev/null && \
+ls *.jar && \
+mv *.jar /opt/app-root/app.jar
 
 jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
 
