@@ -155,8 +155,6 @@
           env:
             - name: NEXUS_MIRROR_URL
               value: ${NEXUS_MIRROR_URL}
-            - name: EXTRA_REPO
-              value: ${EXTRA_REPO}
             - name: MVN_OPTS
               value: ${MVN_OPTS}
             - name: JAVA_OPTS

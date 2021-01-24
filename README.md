@@ -1,7 +1,8 @@
 # Java Openjdk Wildfly Microservices S2i Images
 
+
 ## CentOS - Alpine - Fedora - Debian
-## Openjdk 8 - 11 
+## Openjdk 11,8
 
 ![Docker Stars](https://img.shields.io/docker/stars/mvilche/wildfly-microservices-s21.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/mvilche/wildfly-microservices-s21.svg)
@@ -16,6 +17,7 @@
 - S2i build images
 - Maven
 - Jolokia java monitoring
+- Support Wildfly Swarm, Wildfly Throntail, Wildfly Bootable, Quarkus
 
 ### Deploy Environments 
 
