@@ -42,7 +42,6 @@
 
 
 
-
 ### How use in Openshift
 
 ```console
