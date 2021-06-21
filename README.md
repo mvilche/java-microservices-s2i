@@ -4,10 +4,10 @@
 ## CentOS - Alpine - Fedora - Debian
 ## Openjdk 11,8
 
-![Docker Stars](https://img.shields.io/docker/stars/mvilche/wildfly-microservices-s21.svg)
-![Docker Pulls](https://img.shields.io/docker/pulls/mvilche/wildfly-microservices-s21.svg)
-![Docker Automated](https://img.shields.io/docker/cloud/automated/mvilche/wildfly-microservices-s21)
-![Docker Build](https://img.shields.io/docker/cloud/build/mvilche/wildfly-microservices-s21)
+![Docker Stars](https://img.shields.io/docker/stars/mvilche/wildfly-microservices-s2i.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/mvilche/wildfly-microservices-s2i.svg)
+![Docker Automated](https://img.shields.io/docker/cloud/automated/mvilche/wildfly-microservices-s2i)
+![Docker Build](https://img.shields.io/docker/cloud/build/mvilche/wildfly-microservices-s2i)
 
 
 # Features
