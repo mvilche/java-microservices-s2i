@@ -63,7 +63,7 @@ oc process -f https://raw.githubusercontent.com/mvilche/wildfly-microservices/ma
 
 ```
 
-### Php application image use s2i
+### Java application image use s2i
 
 ```console
 
