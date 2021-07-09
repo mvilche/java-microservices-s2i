@@ -1,4 +1,4 @@
-# Java Openjdk Wildfly Microservices S2i Images
+# Java Openjdk Quarkus - Wildfly Microservices S2i Images
 
 
 ## CentOS - Alpine - Fedora - Debian
@@ -17,7 +17,7 @@
 - S2i build images
 - Maven
 - Jolokia java monitoring
-- Support Wildfly Swarm, Wildfly Throntail, Wildfly Bootable, Quarkus
+- Support Wildfly Throntail, Wildfly Bootable, Quarkus
 
 ### Deploy Environments 
 

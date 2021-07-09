@@ -2,12 +2,12 @@
   apiVersion: v1
   kind: Template
   metadata:
-    name: wildlfy-microservices-s2i-mvilche
+    name: java-openjdk-microservices-s2i-mvilche
     labels:
-      template: wildlfy-microservices-s2i-mvilche
+      template: java-openjdk-microservices-s2i-mvilche
       autor: "Martin_Fabrizzio_Vilche"
     annotations:
-      openshift.io/display-name: "wildlfy-microservices-s2i-mvilche"
+      openshift.io/display-name: "java-openjdk-microservices-s2i-mvilche"
       iconClass: "icon-wildfly"
       description: >-
         Compilador de imagenes para microservicios basados en java 11 y maven 3.6.0
@@ -19,7 +19,7 @@
 
   - apiVersion: v1
     data:
-      app.yaml: |-
+      application.properties: |-
         swarm:
           deployment:
             example-jaas-basic.war:
@@ -67,7 +67,7 @@
       replicas: 1
       revisionHistoryLimit: 10
       selector:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
         deploymentconfig: ${APP_NAME}
       strategy:
         activeDeadlineSeconds: 21600
@@ -82,13 +82,13 @@
       template:
         metadata:
           labels:
-            app: wildfly-microservices-s2i
+            app: java-openjdk-microservices-s2i
             deploymentconfig: ${APP_NAME}
         spec:
           containers:
             - env:
                 - name: APP_OPTIONS
-                  value: '-s /opt/config/app.yaml'
+                  value: ''
                 - name: JAVA_OPTS
                   value: ${JAVA_OPTS}
                 - name: TIMEZONE
@@ -130,7 +130,7 @@
     kind: BuildConfig
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}-s2i
     spec:
       completionDeadlineSeconds: 1800
@@ -159,9 +159,11 @@
               value: ${MVN_OPTS}
             - name: JAVA_OPTS
               value: ${JAVA_OPTS}
+            - name: QUARKUS_PACKAGE_TYPE
+              value: "uber-jar"     
           from:
             kind: ImageStreamTag
-            name: wildfly-microservices-s2i:latest
+            name: java-openjdk-microservices-s2i:latest
         type: Source
       successfulBuildsHistoryLimit: 5
       triggers:
@@ -170,7 +172,7 @@
           imageChange:
             from:
               kind: "ImageStreamTag"
-              name: "wildfly-microservices-s2i:latest"
+              name: "java-openjdk-microservices-s2i:latest"
 
 
 
@@ -179,7 +181,7 @@
     kind: BuildConfig
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}-runtime
     spec:
       completionDeadlineSeconds: 1800
@@ -190,23 +192,23 @@
       source:
         type: Dockerfile
         dockerfile: |-
-          FROM wildfly-microservices-runtime:latest
+          FROM java-openjdk-microservices-runtime:latest
           USER root
-          COPY app.jar /opt/app-root/app.jar
-          RUN chown 1001:0 /opt/app-root/app.jar
+          COPY app.jar /opt/app-root
+          RUN chown 1001:0 /opt/app-root
           USER 1001
         images:
         - from:
             kind: ImageStreamTag
             name: ${APP_NAME}-s2i:latest
           paths:
-          - sourcePath: /opt/app-root/app.jar
+          - sourcePath: /opt/app-root
             destinationDir: "."
       strategy:
         dockerStrategy:
           from:
             kind: ImageStreamTag
-            name: wildfly-microservices-runtime:latest
+            name: java-openjdk-microservices-runtime:latest
         type: Docker
       triggers:
       - type: "imageChange"
@@ -221,7 +223,7 @@
     kind: Service
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}
     spec:
       ports:
@@ -234,7 +236,7 @@
           protocol: TCP
           targetPort: 8778
       selector:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
         deploymentconfig: ${APP_NAME}
       sessionAffinity: None
       type: ClusterIP
@@ -244,7 +246,7 @@
     kind: Route
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}
     spec:
       port:
@@ -260,7 +262,7 @@
     kind: ImageStream
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}
     spec: {}
 
@@ -268,7 +270,7 @@
     kind: ImageStream
     metadata:
       labels:
-        app: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
       name: ${APP_NAME}-s2i
     spec: {}
 
@@ -278,16 +280,16 @@
     kind: BuildConfig
     metadata:
       labels:
-        app: wildfly-microservices-s2i
-        build: wildfly-microservices-s2i
-      name: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
+        build: java-openjdk-microservices-s2i
+      name: java-openjdk-microservices-s2i
     spec:
       failedBuildsHistoryLimit: 5
       nodeSelector: null
       output:
         to:
           kind: ImageStreamTag
-          name: 'wildfly-microservices-s2i:latest'
+          name: 'java-openjdk-microservices-s2i:latest'
       postCommit: {}
       resources: {}
       runPolicy: Serial
@@ -295,7 +297,7 @@
         contextDir: openjdk${VERSION_JDK}
         git:
           ref: main
-          uri: 'https://github.com/mvilche/wildfly-microservices-s2i.git'
+          uri: 'https://github.com/mvilche/java-microservices-s2i.git'
         type: Git
       strategy:
         dockerStrategy:
@@ -310,23 +312,23 @@
     kind: ImageStream
     metadata:
       labels:
-        app: wildfly-microservices-s2i
-      name: wildfly-microservices-s2i
+        app: java-openjdk-microservices-s2i
+      name: java-openjdk-microservices-s2i
     spec: {}
 
   - apiVersion: v1
     kind: BuildConfig
     metadata:
       labels:
-        app: wildfly-microservices-s2i
-      name: wildfly-microservices-runtime
+        app: java-openjdk-microservices-s2i
+      name: java-openjdk-microservices-runtime
     spec:
       failedBuildsHistoryLimit: 5
       nodeSelector: null
       output:
         to:
           kind: ImageStreamTag
-          name: 'wildfly-microservices-runtime:latest'
+          name: 'java-openjdk-microservices-runtime:latest'
       postCommit: {}
       resources: {}
       runPolicy: Serial
@@ -334,7 +336,7 @@
         contextDir: openjdk${VERSION_JDK}
         git:
           ref: main
-          uri: 'https://github.com/mvilche/wildfly-microservices-s2i.git'
+          uri: 'https://github.com/mvilche/java-microservices-s2i.git'
         type: Git
       strategy:
         dockerStrategy:
@@ -348,8 +350,8 @@
     kind: ImageStream
     metadata:
       labels:
-        app: wildfly-microservices-s2i
-      name: wildfly-microservices-runtime
+        app: java-openjdk-microservices-s2i
+      name: java-openjdk-microservices-runtime
     spec: {}
 
 ######
@@ -367,7 +369,7 @@
       value: '11'
       required: true
     - name: IMAGE_VERSION
-      displayName: Image SO version. Values centos,alpine,fedora,debian. View https://hub.docker.com/repository/docker/mvilche/wildfly-microservices-s2i/tags
+      displayName: Image SO version. Values centos,alpine,fedora,debian. View https://hub.docker.com/repository/docker/mvilche/java-microservices-s2i/tags
       value: 'alpine'
       required: true
     - name: REPO_GIT
