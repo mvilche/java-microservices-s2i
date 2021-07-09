@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:10
 
 ENV JDK_VERSION=openjdk-11-jre
 
