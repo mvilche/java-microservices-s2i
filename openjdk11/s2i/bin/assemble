@@ -56,27 +56,8 @@ EOF
 fi
 
 
-echo "---> START COMPILE SOURCES..."
-cd /opt/src && mvn clean package ${MVN_OPTS}
 
-ERR=$?
-    if [ $ERR -ne 0 ]; then
-echo "---> COMPILE ERROR $ERR"
-exit $ERR
-
-fi
-
-echo "---> COPY GENERATE APP TO DEPLOY DIR..."
-find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || find . -name '*-runner.jar' | xargs cp -t . &> /dev/null || find . -name '*-run.jar' | xargs cp -t . &> /dev/null && \
-ls *.jar && \
-mv *.jar /opt/app-root/app.jar
-
-jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
-
-if [ $jar == 0 ]; then
-echo "---> APP JAR NOT FOUND!"
-exit 1
-fi
+finishStep() {
 
 ls -lh /opt/app-root && echo "---> APP INSTALL OK!"
 
@@ -87,3 +68,61 @@ echo "---> FIX PERMISSIONS DIR"
 cd $HOME && rm -rf /opt/src
 
 echo "---> INSTALL FINISH"
+exit 0
+
+}
+
+
+echo "---> START COMPILE SOURCES..."
+cd /opt/src && mvn clean package ${MVN_OPTS}
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+
+fi
+
+
+if [ ! -z "$QUARKUS_PACKAGE_TYPE" ]; then
+
+echo "---> QUARKUS FOUND!"
+
+if [ "$QUARKUS_PACKAGE_TYPE" == "fast-jar" ]; then
+
+echo "---> QUARKUS FOUND! FAST JAR"
+
+cp -rf target/quarkus-app /opt/app-root/quarkus-app &> /dev/null
+
+jarQ=`ls -1 /opt/app-root/quarkus-app/quarkus-run.jar 2>/dev/null | wc -l`
+
+if [ $jarQ == 0 ]; then
+echo "---> QUARKUS JAR NOT FOUND!"
+ls -lh /opt/app-root/quarkus-app
+exit 1
+fi
+
+ls -lh /opt/app-root/quarkus-app && echo "---> APP QUARKUS INSTALL OK!"
+finishStep
+fi
+
+fi
+
+
+echo "---> COPY GENERATE APP TO DEPLOY DIR..."
+find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-runner.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-run.jar' | xargs cp -t . &> /dev/null && \
+ls *.jar && \
+mv *.jar /opt/app-root/app.jar
+
+jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
+
+if [ $jar == 0 ]; then
+echo "---> APP JAR NOT FOUND!"
+exit 1
+fi
+
+finishStep

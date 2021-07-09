@@ -39,7 +39,7 @@
 | ------ | ------ |
 | MVN_OPTS | Maven options  |
 | NEXUS_MIRROR_URL | Nexus repository override repository in pom.xml |
-
+| QUARKUS_PACKAGE_TYPE | Quarkus package type values: fast-jar, uber-Jar |
 
 
 ### How use in Openshift
