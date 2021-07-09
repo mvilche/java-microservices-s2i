@@ -92,17 +92,17 @@ if [ "$QUARKUS_PACKAGE_TYPE" == "fast-jar" ]; then
 
 echo "---> QUARKUS FOUND! FAST JAR"
 
-cp -rf target/quarkus-app /opt/app-root/quarkus-app &> /dev/null
+cp -rf target/quarkus-app/. /opt/app-root &> /dev/null
 
-jarQ=`ls -1 /opt/app-root/quarkus-app/quarkus-run.jar 2>/dev/null | wc -l`
+jarQ=`ls -1 /opt/app-root/quarkus-run.jar 2>/dev/null | wc -l`
 
 if [ $jarQ == 0 ]; then
 echo "---> QUARKUS JAR NOT FOUND!"
-ls -lh /opt/app-root/quarkus-app
+ls -lh /opt/app-root
 exit 1
 fi
 
-ls -lh /opt/app-root/quarkus-app && echo "---> APP QUARKUS INSTALL OK!"
+ls -lh /opt/app-root && echo "---> APP QUARKUS INSTALL OK!"
 finishStep
 fi
 
