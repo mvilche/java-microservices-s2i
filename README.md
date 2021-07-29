@@ -46,7 +46,7 @@
 
 ```console
 
-oc process -f https://raw.githubusercontent.com/mvilche/wildfly-microservices/master/wildfly-microservices-s2i-template-dev.yaml \ 
+oc process -f https://raw.githubusercontent.com/mvilche/java-microservices-s2i/master/java-openjdk-microservices-s2i-template-dev.yaml \ 
 -p APP_NAME=myapp \
 -p VERSION_JDK=11 \ 
 -p REPO_GIT=https://github.com/myuser/java-sample-app.git
@@ -59,7 +59,7 @@ oc process -f https://raw.githubusercontent.com/mvilche/wildfly-microservices/ma
 
 ```console
 
- docker build -t wildfly-microservices-s2i:openjdk11-jdk -f openjdk11/Dockerfile.jdk myapp
+ docker build -t java-openjdk-microservices-s2i:openjdk11-jdk -f openjdk11/Dockerfile.jdk myapp
 
 ```
 
@@ -67,7 +67,7 @@ oc process -f https://raw.githubusercontent.com/mvilche/wildfly-microservices/ma
 
 ```console
 
-s2i build https://github.com/myuser/java-sample-app.git wildfly-microservices-s2i:openjdk11-jdk myapp:latest --incremental
+s2i build https://github.com/myuser/java-sample-app.git java-openjdk-microservices-s2i:openjdk11-jdk myapp:latest --incremental
 
 ```
 
