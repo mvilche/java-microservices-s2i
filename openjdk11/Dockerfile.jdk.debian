@@ -36,9 +36,9 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 USER 1001:0
 
-EXPOSE 8080
+EXPOSE 8080 8778
 
-CMD ["/usr/libexec/s2i/usage"]
+CMD ["/usr/libexec/s2i/run"]
 
 
 
