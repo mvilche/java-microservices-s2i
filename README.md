@@ -13,11 +13,13 @@
 # Features
 
 - Non-root
-- Openshift Ready!
+- Okd Ready
+- Kubernetes Ready
 - S2i build images
+- S2i runtime images
 - Maven
 - Gradle
-- Jolokia java monitoring
+- Jolokia Java monitoring
 - Support Wildfly Throntail, Wildfly Bootable, Quarkus
 
 ### Deploy Environments 

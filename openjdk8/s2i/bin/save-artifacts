@@ -9,8 +9,13 @@
 #
 
 pushd ${HOME} >/dev/null
+
 if [ -d .m2 ]; then
     tar cf - .m2
 fi
-popd >/dev/null
 
+if [ -d .gradle ]; then
+    tar cf - .gradle
+fi
+
+popd >/dev/null
