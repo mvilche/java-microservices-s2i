@@ -12,14 +12,24 @@ set -e
 
 shopt -u dotglob
 
-export JAVA_OPTS="-XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError"
+export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
 if [[ "$1" == "-h" ]]; then
   exec /usr/libexec/s2i/usage
 fi
 
+
 if [ ! -f /tmp/src/pom.xml ]; then
-  echo "FATAL - No pom.xml found"
+  echo "----> FATAL - No pom.xml found"
+  if [ ! -f /tmp/src/gradlew ]; then
+  echo " ----> FATAL - No gradlew found"
   exit 1
+  else
+   echo " ----> Gradle project found"
+   export projectType="GRADLE"
+  fi
+    else
+   echo " ----> Maven project found"
+   export projectType="MAVEN"
 fi
 
 
@@ -74,6 +84,9 @@ exit 0
 
 
 echo "---> START COMPILE SOURCES..."
+
+if [ "$projectType" == "MAVEN" ]; then
+echo "----> START COMPILE PROJECT $projectType"
 cd /opt/src && mvn clean package ${MVN_OPTS}
 
 ERR=$?
@@ -82,7 +95,20 @@ echo "---> COMPILE ERROR $ERR"
 exit $ERR
 
 fi
+fi
 
+
+if [ "$projectType" == "GRADLE" ]; then
+echo "----> START COMPILE PROJECT $projectType"
+cd /opt/src && ./gradlew clean build ${GRADLE_OPTS}
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+
+fi
+fi
 
 if [ ! -z "$QUARKUS_PACKAGE_TYPE" ]; then
 

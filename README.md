@@ -16,6 +16,7 @@
 - Openshift Ready!
 - S2i build images
 - Maven
+- Gradle
 - Jolokia java monitoring
 - Support Wildfly Throntail, Wildfly Bootable, Quarkus
 
@@ -38,6 +39,7 @@
 | Environment | Details |
 | ------ | ------ |
 | MVN_OPTS | Maven options  |
+| GRADLE_OPTS | Gradle options  |
 | NEXUS_MIRROR_URL | Nexus repository override repository in pom.xml |
 | QUARKUS_PACKAGE_TYPE | Quarkus package type values: fast-jar, uber-Jar |
 
