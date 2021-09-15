@@ -17,6 +17,7 @@
   objects:
 
 
+
   - apiVersion: v1
     data:
       application.properties: |-
