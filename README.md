@@ -2,7 +2,7 @@
 
 
 ## CentOS - Alpine - Fedora - Debian
-## Openjdk 11,8
+## Openjdk 16,15,14,13,11,8
 
 ![Docker Stars](https://img.shields.io/docker/stars/mvilche/java-microservices-s2i.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/mvilche/java-microservices-s2i.svg)
