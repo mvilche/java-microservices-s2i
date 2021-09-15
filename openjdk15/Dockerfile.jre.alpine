@@ -1,0 +1,41 @@
+FROM alpine:3.14
+
+ENV JDK_VERSION=openjdk15-jre \
+JAVA_HOME=/usr/lib/jvm/default-jvm
+
+LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
+      io.k8s.description="Runtime image jdk alpine" \
+      io.k8s.display-name="Java Applications" \
+      io.openshift.tags="builder,java,maven,runtime" \
+      io.openshift.expose-services="8080,8778" \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
+      org.jboss.deployments-dir="/opt/app-root"
+
+RUN apk --no-cache upgrade --available && \
+    apk add $JDK_VERSION --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing && \
+    apk add --update --no-cache wget curl bash shadow busybox-suid coreutils rsync findutils tzdata msttcorefonts-installer fontconfig && \
+    update-ms-fonts && \
+    fc-cache -f
+
+COPY s2i/bin /usr/libexec/s2i
+
+COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
+
+RUN adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
+mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && \
+chown -R 1001 /opt /usr/libexec/s2i /etc/localtime /etc/timezone  && \
+chgrp -R 0 /opt /usr/libexec/s2i /etc/localtime /etc/timezone  && \
+chmod -R g=u /opt /usr/libexec/s2i /etc/localtime /etc/timezone && \
+chmod +x /usr/libexec/s2i/*
+
+WORKDIR /opt/app-root
+
+ENV HOME=/home/s2i \
+JAVA_HOME=/usr/lib/jvm/default-jvm
+
+USER 1001:0
+
+EXPOSE 8080 8778
+
+CMD ["/usr/libexec/s2i/run"]
+
