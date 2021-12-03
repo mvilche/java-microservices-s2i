@@ -42,13 +42,13 @@ fi
 
 if [ "$JOLOKIA_ENABLE" == 1 ] && [ "$PRECHECK" == 1 ] ; then
 echo "---->  JOLOKIA_ENABLE FOUND!.."
-echo "---->  METRICS ENDPOINT :8787/jolokia"
+echo "---->  METRICS ENDPOINT 0.0.0.0:8787/jolokia"
 JMX_METRICS=-javaagent:/usr/libexec/s2i/jolokia.jar=host=0.0.0.0,protocol=http,port=8787
 fi
 
 if [ "$PROMETHEUS_ENABLE" == 1 ] && [ "$PRECHECK" == 1 ]; then
 echo "---->  PROMETHEUS_ENABLE FOUND!.."
-echo "---->  METRICS ENDPOINT :8787/metrics"
+echo "---->  METRICS ENDPOINT 0.0.0.0:8787/metrics"
 JMX_METRICS=-javaagent:/usr/libexec/s2i/prometheus.jar=0.0.0.0:8787:/usr/libexec/s2i/prometheus-config.yml
 fi
 
