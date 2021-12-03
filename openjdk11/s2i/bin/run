@@ -8,7 +8,8 @@
 #
 
 export APP_DIR=/opt/app-root
-
+export JMX_METRICS=
+export PRECHECK=
 
 if [ -z "$TIMEZONE" ]; then
 	echo "···································································································"
@@ -30,14 +31,26 @@ if [ ! -z "$WAITFOR_HOST" ] && [ ! -z "$WAITFOR_PORT" ] ; then
 	echo "···································································································"
 fi
 
-
-if [ ! -f $APP_DIR/jolokia.jks ]; then
-	echo "···································································································"
-	echo "GENERATE JOLOKIA KEYSTORE"
-	keytool -genkey -keyalg RSA -alias selfsigned -keystore $APP_DIR/jolokia.jks -storepass password -validity 360 -keysize 2048 -dname "cn=jolokia, ou=jolokia, o=jolokia, c=jolokia" &>/dev/null
-	echo "···································································································"
+if [ "$PROMETHEUS_ENABLE" == 1 ] && [ "$JOLOKIA_ENABLE" == 1 ]; then
+echo "---->  ERROR -  FOUND PROMETHEUS_ENABLE = 1 AND JOLOKIA_ENABLE = 1"
+echo "---->  YOU MUST SELECT ONE!"
+echo "---->  CONTINUING WITHOUT ACTIVE METRICS...."
+else
+PRECHECK=1
 fi
 
+
+if [ "$JOLOKIA_ENABLE" == 1 ] && [ "$PRECHECK" == 1 ] ; then
+echo "---->  JOLOKIA_ENABLE FOUND!.."
+echo "---->  METRICS ENDPOINT :8787/jolokia"
+JMX_METRICS=-javaagent:/usr/libexec/s2i/jolokia.jar=host=0.0.0.0,protocol=http,port=8787
+fi
+
+if [ "$PROMETHEUS_ENABLE" == 1 ] && [ "$PRECHECK" == 1 ]; then
+echo "---->  PROMETHEUS_ENABLE FOUND!.."
+echo "---->  METRICS ENDPOINT :8787/metrics"
+JMX_METRICS=-javaagent:/usr/libexec/s2i/prometheus.jar=0.0.0.0:8787:/usr/libexec/s2i/prometheus-config.yml
+fi
 
 	echo "···································································································"
 	echo "STARTING MICROSERVICE..."
@@ -45,8 +58,8 @@ fi
 
 if [ -f $APP_DIR/quarkus-run.jar ]; then
 echo "QUARKUS APP FAST JAR STARTING.."
-exec java -javaagent:/usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar=host=0.0.0.0,protocol=https,keystore=$APP_DIR/jolokia.jks,keystorePassword=password  $JAVA_OPTS -jar /opt/app-root/quarkus-run.jar $APP_OPTIONS
+exec java $JMX_METRICS  $JAVA_OPTS -jar /opt/app-root/quarkus-run.jar $APP_OPTIONS
 
 else
-exec java -javaagent:/usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar=host=0.0.0.0,protocol=https,keystore=$APP_DIR/jolokia.jks,keystorePassword=password  $JAVA_OPTS -jar /opt/app-root/app.jar $APP_OPTIONS
+exec java $JMX_METRICS $JAVA_OPTS -jar /opt/app-root/app.jar $APP_OPTIONS
 fi

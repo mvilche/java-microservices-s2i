@@ -20,7 +20,8 @@
 - Maven
 - Gradle
 - Jolokia Java monitoring
-- Support Wildfly Throntail, Wildfly Bootable, Quarkus
+- Prometheus Java monitoring
+- Support Wildfly Throntail, Wildfly Bootable, Quarkus, custom
 
 ### Deploy Environments 
 
@@ -32,6 +33,8 @@
 | APP_OPTIONS | set extra arguments when application start |
 | WAITFOR_HOST | set name host |
 | WAITFOR_PORT | set port for WAITFOR_HOST |
+| JOLOKIA_ENABLE | Enable jolokia jmx monitoring|
+| PROMETHEUS_ENABLE | Enable prometheus jmx monitoring |
 
 
 
@@ -44,19 +47,6 @@
 | GRADLE_OPTS | Gradle options  |
 | NEXUS_MIRROR_URL | Nexus repository override repository in pom.xml |
 | QUARKUS_PACKAGE_TYPE | Quarkus package type values: fast-jar, uber-Jar |
-
-
-### How use in Openshift
-
-```console
-
-oc process -f https://raw.githubusercontent.com/mvilche/java-microservices-s2i/master/java-openjdk-microservices-s2i-template-dev.yaml \ 
--p APP_NAME=myapp \
--p VERSION_JDK=11 \ 
--p REPO_GIT=https://github.com/myuser/java-sample-app.git
--p SOURCE_SECRET=github | oc create -f -
-
-```
 
 
 ### Generate builder image

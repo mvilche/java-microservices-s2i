@@ -1,6 +1,6 @@
-FROM alpine:3.14
+FROM alpine:3.15
 
-ENV MAVEN_VERSION=3.8.1 \
+ENV MAVEN_VERSION=3.8.4 \
 JDK_VERSION=openjdk11-jdk
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
@@ -13,7 +13,7 @@ LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
 
 RUN apk --no-cache upgrade --available && apk add --update --no-cache $JDK_VERSION wget bash git busybox-extras which rsync curl openssh findutils shadow busybox-suid coreutils tzdata msttcorefonts-installer fontconfig
 RUN mkdir -p /opt/app-root /opt/maven && rm -rf /etc/localtime && \
-wget -q http://www-eu.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
+wget https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 tar xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt/maven && rm apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 ln -s /opt/maven/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn && \
 update-ms-fonts && \
@@ -21,7 +21,9 @@ fc-cache -f
 
 COPY s2i/bin/ /usr/libexec/s2i
 
-COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
+COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia.jar
+COPY contrib/jmx_prometheus-0.16.1.jar /usr/libexec/s2i/prometheus.jar
+COPY contrib/prometheus-config.yml /usr/libexec/s2i/prometheus-config.yml
 
 RUN mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
 chown -R 1001 /opt /home/s2i /usr/libexec/s2i /etc/localtime /etc/timezone  && \
