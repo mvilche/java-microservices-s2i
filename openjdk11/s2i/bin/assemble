@@ -19,22 +19,22 @@ fi
 
 
 if [ ! -f /tmp/src/pom.xml ]; then
-  echo "----> FATAL - No pom.xml found"
+  echo "----> FATAL - NO pom.xml FOUND!"
   if [ ! -f /tmp/src/gradlew ]; then
   echo " ----> FATAL - No gradlew found"
   exit 1
   else
-   echo " ----> Gradle project found"
+   echo " ----> GRADLE PROJECT FOUND!"
    export projectType="GRADLE"
   fi
     else
-   echo " ----> Maven project found"
+   echo " ----> MAVEN PROJECT FOUND!"
    export projectType="MAVEN"
 fi
 
 
 if [ -d /tmp/artifacts/.m2 ]; then
-  echo "---> Restoring build artifacts..."
+  echo "---> RESTORING BUILD ARTIFACTS FROM CACHE..."
   mv /tmp/artifacts/.m2 /home/s2i/
 fi
 
@@ -66,6 +66,14 @@ EOF
 fi
 
 
+clean() {
+
+
+rm -rf /tmp/*
+echo "---> CLEAN TASKS FINISH!"
+
+}
+
 
 finishStep() {
 
@@ -77,7 +85,9 @@ echo "---> FIX PERMISSIONS DIR"
 
 cd $HOME && rm -rf /opt/src
 
-echo "---> INSTALL FINISH"
+clean
+
+echo "---> INSTALL FINISH!"
 exit 0
 
 }
@@ -87,6 +97,7 @@ echo "---> START COMPILE SOURCES..."
 
 if [ "$projectType" == "MAVEN" ]; then
 echo "----> START COMPILE PROJECT $projectType"
+echo "----> EXECUTING mvn clean package ${MVN_OPTS}"
 cd /opt/src && mvn clean package ${MVN_OPTS}
 
 ERR=$?
@@ -100,6 +111,7 @@ fi
 
 if [ "$projectType" == "GRADLE" ]; then
 echo "----> START COMPILE PROJECT $projectType"
+echo "----> EXECUTING ./gradlew clean build ${GRADLE_OPTS}"
 cd /opt/src && ./gradlew clean build ${GRADLE_OPTS}
 
 ERR=$?
@@ -112,17 +124,17 @@ fi
 
 if [ ! -z "$QUARKUS_PACKAGE_TYPE" ]; then
 
-echo "---> QUARKUS FOUND!"
+echo "---> QUARKUS PROJECT DETECTED!"
 
 if [ "$QUARKUS_PACKAGE_TYPE" == "fast-jar" ]; then
 
-echo "---> QUARKUS FOUND! FAST JAR"
+echo "---> QUARKUS PROJECT FOUND FAST JAR"
 
 cp -rf target/quarkus-app/. /opt/app-root &> /dev/null
 
 jarQ=`ls -1 /opt/app-root/quarkus-run.jar 2>/dev/null | wc -l`
 
-if [ $jarQ == 0 ]; then
+if [ "$jarQ" == 0 ]; then
 echo "---> QUARKUS JAR NOT FOUND!"
 ls -lh /opt/app-root
 exit 1
