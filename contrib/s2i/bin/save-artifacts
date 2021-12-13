@@ -11,12 +11,21 @@
 pushd ${HOME} >/dev/null
 
 if [ -d .m2 ]; then
+    if [ -d .sonar ]; then
+    tar cf - .m2 .sonar
+    else
     tar cf - .m2
+    fi
 fi
 
 if [ -d .gradle ]; then
+ if [ -d .sonar ]; then
+ tar cf - .gradle .sonar
+ else
     tar cf - .gradle
+ fi
 fi
+
 
 popd >/dev/null
 

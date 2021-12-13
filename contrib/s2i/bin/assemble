@@ -70,8 +70,8 @@ cat << EOF > /home/s2i/.m2/settings.xml
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
-</settings>COPY contrib/jolokia-jCOPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
-vm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
+</settings>
+EOF
 fi
 
 
