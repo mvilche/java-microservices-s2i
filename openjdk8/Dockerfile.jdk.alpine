@@ -1,6 +1,7 @@
-FROM alpine:3.14
+FROM alpine:3.15
 
-ENV MAVEN_VERSION=3.6.3 \
+ENV MAVEN_VERSION=3.8.4 \
+JAVA_VERSION_CHECK=8 \
 JDK_VERSION=openjdk8
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
@@ -21,9 +22,12 @@ fc-cache -f
 
 COPY s2i/bin/ /usr/libexec/s2i
 
-COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
+COPY plugins/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia.jar
+COPY plugins/jmx_prometheus-0.16.1.jar /usr/libexec/s2i/prometheus.jar
+COPY plugins/prometheus-config.yml /usr/libexec/s2i/prometheus-config.yml
 
-RUN mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
+
+RUN mkdir -p /opecho "----> DETECTED JAVA 8"t/app-root /opt/config && touch /etc/localtime /etc/timezone && adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
 chown -R 1001 /opt /home/s2i /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chgrp -R 0 /opt /home/s2i /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chmod -R g=u /opt /usr/libexec/s2i /etc/localtime /etc/timezone && \

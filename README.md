@@ -52,8 +52,9 @@
 ### Generate builder image
 
 ```console
+Example build opendjdk 11 alpine image
 
- docker build -t java-openjdk-microservices-s2i:openjdk11-jdk -f openjdk11/Dockerfile.jdk myapp
+ docker build -t java-microservices:jdk11-alpine -f openjdk11/Dockerfile.jdk.alpine contrib
 
 ```
 
@@ -61,7 +62,7 @@
 
 ```console
 
-s2i build https://github.com/myuser/java-sample-app.git java-openjdk-microservices-s2i:openjdk11-jdk myapp:latest --incremental
+s2i build https://github.com/myuser/java-sample-app.git java-microservices:jdk11-alpine myapp:latest --incremental
 
 ```
 

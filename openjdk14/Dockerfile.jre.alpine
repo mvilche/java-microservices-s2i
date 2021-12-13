@@ -1,6 +1,7 @@
-FROM alpine:3.14
+FROM alpine:3.15
 
 ENV JDK_VERSION=openjdk14-jre \
+JAVA_VERSION_CHECK=11 \
 JAVA_HOME=/usr/lib/jvm/default-jvm
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
@@ -19,7 +20,9 @@ RUN apk --no-cache upgrade --available && \
 
 COPY s2i/bin /usr/libexec/s2i
 
-COPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
+COPY plugins/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia.jar
+COPY plugins/jmx_prometheus-0.16.1.jar /usr/libexec/s2i/prometheus.jar
+COPY plugins/prometheus-config.yml /usr/libexec/s2i/prometheus-config.yml
 
 RUN adduser -D -u 1001 s2i && usermod -aG 0 s2i && \
 mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && \
