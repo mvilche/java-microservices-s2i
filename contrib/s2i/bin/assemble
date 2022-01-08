@@ -46,7 +46,7 @@ if [ -d /tmp/artifacts/.m2 ]; then
   mv /tmp/artifacts/.m2 /home/s2i/
 fi
 
-echo "---> INSTALLING SOURCE CODE..."
+echo "---> INSTALANDO CODIGO FUENTE..."
 mkdir /opt/src
 cp -Rf /tmp/src/* /opt/src/
 
