@@ -42,8 +42,7 @@ fi
 
 
 if [ -d /tmp/artifacts/.m2 ]; then
-  echo "---> RESTORING BCOPY contrib/jolokia-jCOPY contrib/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jar
-vm-1.6.2-agent.jar /usr/libexec/s2i/jolokia-jvm-1.6.2-agent.jarUILD ARTIFACTS FROM CACHE..."
+  echo "---> RESTORING BUILD ARTIFACTS FROM CACHE..."
   mv /tmp/artifacts/.m2 /home/s2i/
 fi
 
