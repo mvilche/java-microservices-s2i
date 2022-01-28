@@ -10,8 +10,6 @@
 export APP_DIR=/opt/app-root
 export JMX_METRICS=
 export PRECHECK=
-export EXTRA_JAVA_OPTS=
-export OVERRIDE_JAVA_OPTS=
 
 if [ -z "$TIMEZONE" ]; then
 	echo "···································································································"
@@ -54,40 +52,31 @@ echo "---->  METRICS ENDPOINT 0.0.0.0:8787/metrics"
 JMX_METRICS=-javaagent:/usr/libexec/s2i/prometheus.jar=0.0.0.0:8787:/usr/libexec/s2i/prometheus-config.yml
 fi
 
-if [ "$JAVA_VERSION_CHECK" == 1 ]
-echo "---->  PROMETHEUS_ENABLE FOUND!.."
-echo "---->  METRICS ENDPOINT 0.0.0.0:8787/metrics"
-JMX_METRICS=-javaagent:/usr/libexec/s2i/prometheus.jar=0.0.0.0:8787:/usr/libexec/s2i/prometheus-config.yml
-fi
 
-
-
-if [ ! -z "$OVERRIDE_JAVA_OPTS" ]; then
+if [ ! -z $OVERRIDE_JAVA_OPTS ]; then
 echo "----> OVERRIDE_JAVA_OPTS FOUND!"
 echo "----> SETTING JAVA_OPTS $OVERRIDE_JAVA_OPTS"
 export JAVA_OPTS=$OVERRIDE_JAVA_OPTS
 else
-if [ "$JAVA_VERSION_CHECK" == 8 ]; then
-echo "----> DETECTED JAVA = 8"
-echo "----> SETTING JAVA_OPTS"
-echo "----> -XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
-export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
-fi
-
 if [ "$JAVA_VERSION_CHECK" == 11 ]; then
 echo "----> DETECTED JAVA VERSION >= 11"
 echo "----> SETTING JAVA_OPTS"
 echo "----> -XX:-UseContainerSupport -XX:MaxRAMPercentage=95.0 -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError"
 export JAVA_OPTS="-XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError"
 fi
+if [ "$JAVA_VERSION_CHECK" == 8 ]; then
+echo "----> DETECTED JAVA = 8"
+echo "----> SETTING JAVA_OPTS"
+echo "----> -XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
+export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
+fi
 fi
 
-if [ ! -z "$EXTRA_JAVA_OPTS" ]; then
+if [ ! -z $EXTRA_JAVA_OPTS ]; then
 echo "----> EXTRA_JAVA_OPTS FOUND!"
 echo "----> ADD EXTRA_JAVA_OPTS TO JAVA_OPTS"
 echo "----> SETTING EXTRA_JAVA_OPTS $EXTRA_JAVA_OPTS"
 fi
-
 
 	echo "···································································································"
 	echo "STARTING MICROSERVICE..."
