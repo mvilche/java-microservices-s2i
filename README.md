@@ -1,7 +1,7 @@
 # Java Openjdk Quarkus - Wildfly Microservices S2i Images
 
 
-## CentOS - Alpine - Fedora - Debian
+## RockyLinux - CentOS - Alpine - Fedora - Debian
 ## Openjdk 16,15,14,13,11,8
 
 ![Docker Stars](https://img.shields.io/docker/stars/mvilche/java-microservices-s2i.svg)
