@@ -1,0 +1,174 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 's2i-maven-java' image.
+# The 'assemble' script builds your application source so that it is ready to run.
+#
+# For more information refer to the documentation:
+#	https:/JAVA_VERSION_CHECK
+
+set -e
+
+
+shopt -u dotglob
+
+if [ "$JAVA_VERSION_CHECK" == 8 ]; then
+echo "----> DETECTED JAVA = 8"
+export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
+fi
+
+if [ "$JAVA_VERSION_CHECK" == 11 ]; then
+echo "----> DETECTED JAVA VERSION >= 11"
+export JAVA_OPTS="-XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError"
+fi
+
+if [[ "$1" == "-h" ]]; then
+  exec /usr/libexec/s2i/usage
+fi
+
+
+if [ ! -f /tmp/src/pom.xml ]; then
+  echo "----> FATAL - NO pom.xml FOUND!"
+  if [ ! -f /tmp/src/gradlew ]; then
+  echo " ----> FATAL - No gradlew found"
+  exit 1
+  else
+   echo " ----> GRADLE PROJECT FOUND!"
+   export projectType="GRADLE"
+  fi
+    else
+   echo " ----> MAVEN PROJECT FOUND!"
+   export projectType="MAVEN"
+fi
+
+
+if [ -d /tmp/artifacts/.m2 ]; then
+  echo "---> RESTORING BUILD ARTIFACTS FROM CACHE..."
+  mv /tmp/artifacts/.m2 /home/s2i/
+fi
+
+echo "---> INSTALLING SOURCE CODE..."
+mkdir /opt/src
+cp -Rf /tmp/src/* /opt/src/
+
+
+if [ ! -z "$NEXUS_MIRROR_URL" ]; then
+echo "---> ENABLE NEXUS MIRROR"
+
+if [ ! -d /home/s2i/.m2 ]; then
+  mkdir /home/s2i/.m2
+  touch /home/s2i/.m2/settings.xml
+fi
+cat << EOF > /home/s2i/.m2/settings.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <mirrors>
+    <mirror>
+      <id>central</id>
+      <name>central</name>
+      <url>$NEXUS_MIRROR_URL</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+fi
+
+
+clean() {
+
+
+rm -rf /tmp/*
+echo "---> CLEAN TASKS FINISH!"
+
+}
+
+
+finishStep() {
+
+ls -lh /opt/app-root && echo "---> APP INSTALL OK!"
+
+echo "---> FIX PERMISSIONS DIR"
+/usr/libexec/s2i/fix /opt
+/usr/libexec/s2i/fix /home/s2i
+
+cd $HOME && rm -rf /opt/src
+
+clean
+
+echo "---> INSTALL FINISH!"
+exit 0
+
+}
+
+
+echo "---> START COMPILE SOURCES..."
+
+if [ "$projectType" == "MAVEN" ]; then
+echo "----> START COMPILE PROJECT $projectType"
+echo "----> EXECUTING mvn clean package ${MVN_OPTS}"
+cd /opt/src && mvn clean package ${MVN_OPTS}
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+
+fi
+fi
+
+
+if [ "$projectType" == "GRADLE" ]; then
+echo "----> START COMPILE PROJECT $projectType"
+echo "----> EXECUTING ./gradlew clean build ${GRADLE_OPTS}"
+cd /opt/src && ./gradlew clean build ${GRADLE_OPTS}
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+
+fi
+fi
+
+if [ ! -z "$QUARKUS_PACKAGE_TYPE" ]; then
+
+echo "---> QUARKUS PROJECT DETECTED!"
+
+if [ "$QUARKUS_PACKAGE_TYPE" == "fast-jar" ]; then
+
+echo "---> QUARKUS PROJECT FOUND FAST JAR"
+
+cp -rf target/quarkus-app/. /opt/app-root &> /dev/null
+
+jarQ=`ls -1 /opt/app-root/quarkus-run.jar 2>/dev/null | wc -l`
+
+if [ "$jarQ" == 0 ]; then
+echo "---> QUARKUS JAR NOT FOUND!"
+ls -lh /opt/app-root
+exit 1
+fi
+
+ls -lh /opt/app-root && echo "---> APP QUARKUS INSTALL OK!"
+finishStep
+fi
+
+fi
+
+
+echo "---> COPY GENERATE APP TO DEPLOY DIR..."
+find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-runner.jar' | xargs cp -t . &> /dev/null || \
+find . -name '*-run.jar' | xargs cp -t . &> /dev/null && \
+ls *.jar && \
+mv *.jar /opt/app-root/app.jar
+
+jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
+
+if [ $jar == 0 ]; then
+echo "---> APP JAR NOT FOUND!"
+exit 1
+fi
+
+finishStep
