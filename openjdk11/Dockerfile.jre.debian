@@ -20,6 +20,7 @@ COPY s2i/bin /usr/libexec/s2i
 COPY plugins/jolokia-jvm-1.6.2-agent.jar /usr/libexec/s2i/jolokia.jar
 COPY plugins/jmx_prometheus-0.16.1.jar /usr/libexec/s2i/prometheus.jar
 COPY plugins/prometheus-config.yml /usr/libexec/s2i/prometheus-config.yml
+COPY plugins/glowroot /usr/libexec/s2i/glowroot
 
 RUN useradd -m -u 1001 s2i && usermod -aG 0 s2i && \
 mkdir -p /opt/app-root /opt/config && touch /etc/localtime /etc/timezone && \
@@ -35,7 +36,7 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 USER 1001:0
 
-EXPOSE 8080 8778
+EXPOSE 8080 8778 4000
 
 CMD ["/usr/libexec/s2i/run"]
 

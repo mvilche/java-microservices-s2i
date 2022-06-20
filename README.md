@@ -21,6 +21,7 @@
 - Gradle
 - Jolokia Java monitoring
 - Prometheus Java monitoring
+- Glowroot Java monitoring
 - Support Wildfly Throntail, Wildfly Bootable, Quarkus, custom
 
 ### Deploy Environments 
@@ -36,6 +37,9 @@
 | WAITFOR_PORT | set port for WAITFOR_HOST |
 | JOLOKIA_ENABLE | Enable jolokia jmx monitoring|
 | PROMETHEUS_ENABLE | Enable prometheus jmx monitoring |
+| GLOWROOT_ENABLE | Enable glowroot jmx monitoring |
+| GLOWROOT_CENTRAL_COLLECTOR | Send jmx metrics to Glowroot Central - Example http://collector:8181 |
+| GLOWROOT_CENTRAL_COLLECTOR_AGENTID | Agent.id name when send data to Glowroot Central - Example myapp |
 
 
 
