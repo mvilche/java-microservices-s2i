@@ -49,8 +49,12 @@
 | Environment | Details |
 | ------ | ------ |
 | MVN_OPTS | Maven options  |
+| MVN_OVERRIDE_COMMAND | Override default mvn command. Default mvn clean package  |
 | GRADLE_OPTS | Gradle options  |
 | NEXUS_MIRROR_URL | Nexus repository override repository in pom.xml |
+| NEXUS_SERVER_PASSWORD | Nexus repository auth password |
+| NEXUS_SERVER_USERNAME | Nexus repository auth username |
+| NEXUS_SERVER_ID | Nexus repository id name. |
 | QUARKUS_PACKAGE_TYPE | Quarkus package type values: fast-jar, uber-Jar |
 
 

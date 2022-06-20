@@ -51,13 +51,36 @@ mkdir /opt/src
 cp -Rf /tmp/src/* /opt/src/
 
 
-if [ ! -z "$NEXUS_MIRROR_URL" ]; then
-echo "---> ENABLE NEXUS MIRROR"
 
 if [ ! -d /home/s2i/.m2 ]; then
   mkdir /home/s2i/.m2
   touch /home/s2i/.m2/settings.xml
 fi
+
+
+echo "---> GENERATING settings.xml"
+cat << EOF > /home/s2i/.m2/settings.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <servers>
+    <server>
+        <id>$NEXUS_SERVER_ID</id>
+        <username>$NEXUS_SERVER_USERNAME</username>
+        <password>$NEXUS_SERVER_PASSWORD</password>
+    </server>
+  </servers>
+</settings>
+EOF
+
+
+if [ "$NEXUS_SERVER_USERNAME" != "empty" ]; then
+echo "---> DETECTED NEXUS_SERVER_USERNAME!"
+touch /home/s2i/.detectedNexus
+fi
+
+
+if [ ! -z "$NEXUS_MIRROR_URL" ]; then
+echo "---> ENABLE NEXUS MIRROR"
 cat << EOF > /home/s2i/.m2/settings.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
@@ -69,6 +92,13 @@ cat << EOF > /home/s2i/.m2/settings.xml
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
+  <servers>
+    <server>
+      <id>$NEXUS_SERVER_ID</id>
+      <username>$NEXUS_SERVER_USERNAME</username>
+      <password>$NEXUS_SERVER_PASSWORD</password>
+    </server>
+  </servers>
 </settings>
 EOF
 fi
@@ -105,6 +135,18 @@ echo "---> START COMPILE SOURCES..."
 
 if [ "$projectType" == "MAVEN" ]; then
 echo "----> START COMPILE PROJECT $projectType"
+
+if [ ! -z "$MVN_OVERRIDE_COMMAND" ]; then
+echo "----> MVN_OVERRIDE_COMMAND DETECTED!"
+echo "----> EXECUTING ${MVN_OVERRIDE_COMMAND}"
+cd /opt/src && eval "${MVN_OVERRIDE_COMMAND}"
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+fi
+else
 echo "----> EXECUTING mvn clean package ${MVN_OPTS}"
 cd /opt/src && mvn clean package ${MVN_OPTS}
 
@@ -112,7 +154,7 @@ ERR=$?
     if [ $ERR -ne 0 ]; then
 echo "---> COMPILE ERROR $ERR"
 exit $ERR
-
+fi
 fi
 fi
 
@@ -168,7 +210,14 @@ jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
 
 if [ $jar == 0 ]; then
 echo "---> APP JAR NOT FOUND!"
+if [ -f "/home/s2i/.detectedNexus" ]; then
+echo "---> DETECTED POSSIBLE NEXUS DEPLOY TASK!"
+echo "---> EXIT WITH 0!"
+rm -rf /home/s2i/.detectedNexus
+exit 0
+fi
+else
 exit 1
 fi
-
+  
 finishStep
