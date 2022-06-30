@@ -1,0 +1,41 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 's2i-maven-java' image.
+# The 'assemble' script builds your application source so that it is ready to run.
+#
+# For more information refer to the documentation:
+#	https:/JAVA_VERSION_CHECK
+
+set -e
+
+
+shopt -u dotglob
+
+if [[ "$1" == "-h" ]]; then
+  exec /usr/libexec/s2i/usage
+fi
+
+
+clean() {
+rm -rf /tmp/*
+echo "---> CLEAN TASKS FINISH!"
+}
+
+finishStep() {
+echo "---> RUNNING ASSEMBLE-RUNTIME SCRIPT!"
+ls -lh /opt/app-root && echo "---> APP INSTALL OK!"
+echo "---> FIX PERMISSIONS DIR"
+/usr/libexec/s2i/fix /opt
+/usr/libexec/s2i/fix /home/s2i
+clean
+echo "---> INSTALL FINISH!"
+exit 0
+}
+
+if [ -z "${RUNTIME_ASSEMBLE_CUSTOM_COMMAND_RUN}" ]; then
+echo "---> RUNTIME_ASSEMBLE_CUSTOM_COMMAND_RUN DETECTED!"
+echo "---> RUNNING ${RUNTIME_ASSEMBLE_CUSTOM_COMMAND_RUN}"
+eval "${RUNTIME_ASSEMBLE_CUSTOM_COMMAND_RUN}"
+else
+finishStep
+fi
