@@ -30,7 +30,7 @@ chgrp -R 0 /opt /usr/libexec/s2i /etc/localtime /etc/timezone  && \
 chmod -R g=u /opt /usr/libexec/s2i /etc/localtime /etc/timezone && \
 chmod +x /usr/libexec/s2i/*
 
-WORKDIR /opt/app-root
+WORKDIR /opt
 
 ENV HOME=/home/s2i \
 JAVA_HOME=/usr/lib/jvm/default-jvm \

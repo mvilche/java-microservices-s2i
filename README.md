@@ -57,7 +57,7 @@
 | NEXUS_SERVER_ID | Nexus repository id name. |
 | QUARKUS_PACKAGE_TYPE | Quarkus package type values: fast-jar, uber-Jar |
 | RUNTIME_ASSEMBLE_CUSTOM_COMMAND_RUN | Run custom command in assemble-runtime process |
-
+| ARTIFACTORY_NAME | Search for artifcatory with specific name |
 
 
 ### Generate builder image

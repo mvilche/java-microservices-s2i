@@ -16,18 +16,12 @@ if [[ "$1" == "-h" ]]; then
 fi
 
 
-clean() {
-rm -rf /tmp/*
-echo "---> CLEAN TASKS FINISH!"
-}
-
 finishStep() {
 echo "---> RUNNING ASSEMBLE-RUNTIME SCRIPT!"
 ls -lh /opt/app-root && echo "---> APP INSTALL OK!"
 echo "---> FIX PERMISSIONS DIR"
 /usr/libexec/s2i/fix /opt
 /usr/libexec/s2i/fix /home/s2i
-clean
 echo "---> INSTALL FINISH!"
 exit 0
 }

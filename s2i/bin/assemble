@@ -180,6 +180,14 @@ if [ "$QUARKUS_PACKAGE_TYPE" == "fast-jar" ]; then
 
 echo "---> QUARKUS PROJECT FOUND FAST JAR"
 
+jarQ2=`ls -1 target/quarkus-app/quarkus-run.jar 2>/dev/null | wc -l`
+
+if [ "$jarQ2" == 0 ]; then
+echo "---> QUARKUS JAR quarkus-run.jar NOT FOUND IN TARGET DIR!"
+ls -lh target/quarkus-app
+exit 1
+fi
+
 cp -rf target/quarkus-app/. /opt/app-root &> /dev/null
 
 jarQ=`ls -1 /opt/app-root/quarkus-run.jar 2>/dev/null | wc -l`
@@ -197,7 +205,16 @@ fi
 fi
 
 
+if [ ! -z "${ARTIFACTORY_NAME}" ]; then
+echo "----> ARTIFACTORY_NAME DETECTE!"
+echo "----> SERCHING ARTIFACTORY NAME ${ARTIFACTORY_NAME}"
+else
+ARTIFACTORY_NAME=unknow
+fi
+
+
 echo "---> COPY GENERATE APP TO DEPLOY DIR..."
+find . -name "${ARTIFACTORY_NAME}" | xargs cp -t . &> /dev/null || \
 find . -name '*-thorntail.jar' | xargs cp -t . &> /dev/null || \
 find . -name '*-swarm.jar' | xargs cp -t . &> /dev/null || \
 find . -name '*-bootable.jar' | xargs cp -t . &> /dev/null || \
@@ -209,15 +226,16 @@ mv *.jar /opt/app-root/app.jar
 jar=`ls -1 /opt/app-root/app.jar 2>/dev/null | wc -l`
 
 if [ $jar == 0 ]; then
+ls -lh .
 echo "---> APP JAR NOT FOUND!"
 if [ -f "/home/s2i/.detectedNexus" ]; then
 echo "---> DETECTED POSSIBLE NEXUS DEPLOY TASK!"
 echo "---> EXIT WITH 0!"
 rm -rf /home/s2i/.detectedNexus
 exit 0
-fi
 else
 exit 1
+fi
 fi
   
 finishStep
