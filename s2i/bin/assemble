@@ -13,12 +13,12 @@ shopt -u dotglob
 
 if [ "$JAVA_VERSION_CHECK" == 8 ]; then
 echo "----> DETECTED JAVA = 8"
-export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
+export JAVA_OPTS="-XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
 fi
 
 if [ "$JAVA_VERSION_CHECK" == 11 ]; then
 echo "----> DETECTED JAVA VERSION >= 11"
-export JAVA_OPTS="-XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF8 -XX:+ExitOnOutOfMemoryError"
+export JAVA_OPTS="-XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError"
 fi
 
 if [[ "$1" == "-h" ]]; then
