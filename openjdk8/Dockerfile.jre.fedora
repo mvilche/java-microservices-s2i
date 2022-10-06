@@ -1,6 +1,6 @@
 FROM fedora:34
 
-ENV JDK_VERSION=java-1.8.0-openjdk \
+ENV JDK_VERSION=java-1.8.0-openjdk-headless \
 JAVA_VERSION_CHECK=8 \
 JAVA_HOME=/usr/lib/jvm/java-openjdk
 

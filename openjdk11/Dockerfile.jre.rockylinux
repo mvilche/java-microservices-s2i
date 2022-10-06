@@ -1,6 +1,6 @@
 FROM rockylinux:9
 
-ENV JDK_VERSION=java-11-openjdk \
+ENV JDK_VERSION=java-11-openjdk-headless \
 JAVA_VERSION_CHECK=11 \
 JAVA_HOME=/usr/lib/jvm/java-openjdk
 

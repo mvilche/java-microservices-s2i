@@ -32,7 +32,7 @@ chmod +x /usr/libexec/s2i/*
 WORKDIR /opt/app-root
 
 ENV HOME=/home/s2i \
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 \
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-headless-amd64 \
 NEXUS_SERVER_ID=empty \
 NEXUS_SERVER_USERNAME=empty \
 NEXUS_SERVER_PASSWORD=empty
