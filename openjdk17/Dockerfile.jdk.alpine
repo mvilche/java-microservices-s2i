@@ -2,7 +2,7 @@ FROM alpine:3.16
 
 ENV MAVEN_VERSION=3.8.6 \
 JAVA_VERSION_CHECK=11 \
-JDK_VERSION=openjdk13-jdk
+JDK_VERSION=openjdk17-jdk
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
       io.k8s.description="Compilador de aplicaciones java con maven s2i" \

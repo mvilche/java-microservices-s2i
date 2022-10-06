@@ -1,8 +1,9 @@
 # Java Openjdk Quarkus - Wildfly Microservices S2i Images
 
 
-## RockyLinux - CentOS - Alpine - Fedora - Debian
-## Openjdk 16,15,14,13,11,8
+## Alpine - RockyLinux - Debian - Fedora
+## Openjdk 17,16,15,14,13,11,8
+## Amazon Corretto 11,8
 
 ![Docker Stars](https://img.shields.io/docker/stars/mvilche/java-microservices-s2i.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/mvilche/java-microservices-s2i.svg)
@@ -17,12 +18,11 @@
 - Kubernetes Ready
 - S2i build images
 - S2i runtime images
-- Maven
-- Gradle
+- Maven (Jdk images only)
 - Jolokia Java monitoring
 - Prometheus Java monitoring
 - Glowroot Java monitoring
-- Support Wildfly Throntail, Wildfly Bootable, Quarkus, custom
+- Support Wildfly Throntail, Wildfly Bootable, Quarkus, Spring Boot, Custom
 
 ### Deploy Environments 
 
@@ -48,7 +48,7 @@
 
 | Environment | Details |
 | ------ | ------ |
-| MVN_OPTS | Maven options  |
+| MVN_OPTS | Maven options when build  |
 | MVN_OVERRIDE_COMMAND | Override default mvn command. Default mvn clean package  |
 | GRADLE_OPTS | Gradle options  |
 | NEXUS_MIRROR_URL | Nexus repository override repository in pom.xml |
