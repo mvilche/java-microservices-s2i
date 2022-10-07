@@ -20,10 +20,10 @@ else
 	echo "···································································································"
 	echo "---> TIMEZONE ENV FOUND!: " $TIMEZONE
 	echo "---> PRINT DATETIME: " 
-	date
 	echo "···································································································"
 	cat /usr/share/zoneinfo/$TIMEZONE > /etc/localtime && \
 	echo $TIMEZONE > /etc/timezone
+	date
 fi
 
 if [ ! -z "$WAITFOR_HOST" ] && [ ! -z "$WAITFOR_PORT" ] ; then
