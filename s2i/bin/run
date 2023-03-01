@@ -11,7 +11,7 @@ export APP_DIR=/opt/app-root
 export JMX_METRICS=
 export PRECHECK=
 
-if [ -z "$TIMEZONE" ]; then
+if [[ -z "$TIMEZONE" ]]; then
 	echo "···································································································"
 	echo "---> TIMEZONE ENV NOT FOUND - START WITH DEFAULT VALUES"
 	echo "---> VALUES: America/Montevideo | America/El_Salvador"
@@ -20,10 +20,11 @@ else
 	echo "···································································································"
 	echo "---> TIMEZONE ENV FOUND!: " $TIMEZONE
 	echo "---> PRINT DATETIME: " 
-	echo "···································································································"
 	cat /usr/share/zoneinfo/$TIMEZONE > /etc/localtime && \
 	echo $TIMEZONE > /etc/timezone
 	date
+	echo "···································································································"
+
 fi
 
 if [ ! -z "$WAITFOR_HOST" ] && [ ! -z "$WAITFOR_PORT" ] ; then
@@ -73,27 +74,30 @@ fi
 
 
 
-if [ ! -z $OVERRIDE_JAVA_OPTS ]; then
+if [[ ! -z $OVERRIDE_JAVA_OPTS ]]; then
 echo "----> OVERRIDE_JAVA_OPTS FOUND!"
+java -version
 echo "----> SETTING JAVA_OPTS $OVERRIDE_JAVA_OPTS"
 export JAVA_OPTS=$OVERRIDE_JAVA_OPTS
 else
 if [ "$JAVA_VERSION_CHECK" == 11 ]; then
 echo "----> DETECTED JAVA VERSION >= 11"
+java -version
 echo "----> SETTING JAVA_OPTS"
-export JAVA_OPTS="-Djava.awt.headless=true -XX:-UseContainerSupport -XX:MaxRAMPercentage=90.0 -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError"
+export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError"
 echo "----> $JAVA_OPTS"
 fi
 if [ "$JAVA_VERSION_CHECK" == 8 ]; then
 echo "----> DETECTED JAVA = 8"
+java -version
 echo "----> SETTING JAVA_OPTS"
-export JAVA_OPTS="-Djava.awt.headless=true -XX:MaxRAMFraction=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
+export JAVA_OPTS="-Djava.awt.headless=true -XX:MaxRAMPercentage=80.0 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
 echo "----> $JAVA_OPTS"
 
 fi
 fi
 
-if [ ! -z $EXTRA_JAVA_OPTS ]; then
+if [[ ! -z $EXTRA_JAVA_OPTS ]]; then
 echo "----> EXTRA_JAVA_OPTS FOUND!"
 echo "----> ADD EXTRA_JAVA_OPTS TO JAVA_OPTS"
 echo "----> SETTING EXTRA_JAVA_OPTS $EXTRA_JAVA_OPTS"

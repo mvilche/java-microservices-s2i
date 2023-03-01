@@ -1,6 +1,6 @@
-FROM alpine:3.16
+FROM alpine:3.17
 
-ENV MAVEN_VERSION=3.8.6 \
+ENV MAVEN_VERSION=3.9.0 \
 JAVA_VERSION_CHECK=11 \
 JDK_VERSION=openjdk13-jdk
 
@@ -15,7 +15,7 @@ LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
 RUN apk --no-cache upgrade --available && \
 apk add --update --no-cache $JDK_VERSION wget bash git busybox-extras which rsync curl findutils shadow busybox-suid coreutils tzdata fontconfig
 RUN mkdir -p /opt/app-root /opt/maven && rm -rf /etc/localtime && \
-wget -q http://www-eu.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
+wget -q https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz  && \
 tar xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt/maven && rm apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 ln -s /opt/maven/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn
 
