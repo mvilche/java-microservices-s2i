@@ -1,6 +1,6 @@
 FROM fedora:34
 
-ENV MAVEN_VERSION=3.9.0 \
+ENV MAVEN_VERSION=3.9.4 \
 JDK_VERSION=java-1.8.0-openjdk-devel
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \

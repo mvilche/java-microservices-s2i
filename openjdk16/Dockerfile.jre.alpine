@@ -1,4 +1,4 @@
-FROM alpine:3.17
+FROM alpine:3.18
 
 ENV JDK_VERSION=openjdk16-jre \
 JAVA_VERSION_CHECK=11 \

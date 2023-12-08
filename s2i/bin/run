@@ -80,21 +80,13 @@ java -version
 echo "----> SETTING JAVA_OPTS $OVERRIDE_JAVA_OPTS"
 export JAVA_OPTS=$OVERRIDE_JAVA_OPTS
 else
-if [ "$JAVA_VERSION_CHECK" == 11 ]; then
-echo "----> DETECTED JAVA VERSION >= 11"
 java -version
-echo "----> SETTING JAVA_OPTS"
+echo "----> USE DEFAULT SETTING JAVA_OPTS"
 export JAVA_OPTS="-Djava.awt.headless=true -XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError"
 echo "----> $JAVA_OPTS"
-fi
-if [ "$JAVA_VERSION_CHECK" == 8 ]; then
-echo "----> DETECTED JAVA = 8"
-java -version
-echo "----> SETTING JAVA_OPTS"
-export JAVA_OPTS="-Djava.awt.headless=true -XX:MaxRAMPercentage=80.0 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true"
-echo "----> $JAVA_OPTS"
-
-fi
+echo "------>"
+echo "----> USE VARIABLE OVERRIDE_JAVA_OPTS TO OVERRIDE DEFAULT JAVA_OPTS"
+echo "------>"
 fi
 
 if [[ ! -z $EXTRA_JAVA_OPTS ]]; then

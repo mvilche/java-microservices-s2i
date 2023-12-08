@@ -1,6 +1,6 @@
 FROM alpine:3.18
 
-ENV JDK_VERSION=openjdk11-jre \
+ENV JDK_VERSION=openjdk10-jre \
 JAVA_VERSION_CHECK=11 \
 JAVA_HOME=/usr/lib/jvm/default-jvm
 

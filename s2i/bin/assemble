@@ -161,6 +161,18 @@ fi
 
 if [ "$projectType" == "GRADLE" ]; then
 echo "----> START COMPILE PROJECT $projectType"
+
+if [ ! -z "$GRADLE_OVERRIDE_COMMAND" ]; then
+echo "----> GRADLE_OVERRIDE_COMMAND DETECTED!"
+echo "----> EXECUTING ${GRADLE_OVERRIDE_COMMAND}"
+cd /opt/src && eval "${GRADLE_OVERRIDE_COMMAND}"
+
+ERR=$?
+    if [ $ERR -ne 0 ]; then
+echo "---> COMPILE ERROR $ERR"
+exit $ERR
+fi
+else
 echo "----> EXECUTING ./gradlew clean build ${GRADLE_OPTS}"
 cd /opt/src && ./gradlew clean build ${GRADLE_OPTS}
 
@@ -169,6 +181,7 @@ ERR=$?
 echo "---> COMPILE ERROR $ERR"
 exit $ERR
 
+fi
 fi
 fi
 

@@ -2,7 +2,7 @@ FROM rockylinux:9
 
 ENV MAVEN_VERSION=3.9.4 \
 JAVA_VERSION_CHECK=11 \
-JDK_VERSION=java-11-openjdk-devel
+JDK_VERSION=java-17-openjdk-devel
 
 LABEL autor="Martin Vilche <mfvilche@gmail.com>" \
       io.k8s.description="Compilador de aplicaciones java con maven s2i" \
